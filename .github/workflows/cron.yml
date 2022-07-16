@@ -1,0 +1,24 @@
+name: Cron - Slack notify
+
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+
+
+jobs:
+  slack_notify:
+    runs-on: ubuntu-latest
+    env:
+      SLACK_INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_INCOMING_WEBHOOK_URL }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Run script
+        run: deno run --allow-env --allow-net notify.ts
